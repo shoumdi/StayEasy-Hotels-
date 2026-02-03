@@ -1,3 +1,4 @@
+@props(['type','name','place-holder'])
 <div>
     <!-- Smile, breathe, and go slowly. - Thich Nhat Hanh -->
     <label>

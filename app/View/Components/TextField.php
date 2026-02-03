@@ -11,9 +11,14 @@ class TextField extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct()
-    {
-        //
+    public function __construct(
+        private $type,
+        private $name,
+        private $label,
+        private $value,
+        private $placeholder,
+    ) {
+        dd($name);
     }
 
     /**
@@ -21,6 +26,13 @@ class TextField extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.text-field');
+        $data = [
+            'type' => $this->type,
+            'name' => $this->name,
+            'value' => $this->value,
+            'label' => $this->label,
+            'place-holder' => $this->placeholder
+        ];
+        return view('components.text-field', compact('data'));
     }
 }
