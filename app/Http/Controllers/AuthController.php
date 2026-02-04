@@ -12,13 +12,21 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
 
-    public function me(){
+    public function me()
+    {
         $user = auth()->user();
-        switch($user->role()->name){
-            case 'Admin': redirect()->route('admin.index'); break;
-            case 'Client': die('client'); break;
-            case 'Manager': die('Manager'); break;
-            default: die('uknown');
+        switch ($user->role->name) {
+            case 'Admin':
+                return redirect()->route('admin.roles.index');
+                break;
+            case 'Client':
+                die('client');
+                break;
+            case 'Manager':
+                die('Manager');
+                break;
+            default:
+                die('uknown');
         }
     }
     public function showLoginView()
@@ -42,9 +50,9 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $req->session()->regenerate();
-            return redirect()->route('home');
+            return redirect()->route('auth.me');
         }
-        return redirect()->route('home');
+        return redirect()->route('auth.login');
     }
     public function register(Request $req)
     {
@@ -53,7 +61,8 @@ class AuthController extends Controller
             'password' => ['required'],
             'username' => ['required'],
             'role_id' => ['required'],
-        ]);
+            ]);
+            // dd($req);
         if (User::where('email', $credentials['email'])->exists()) {
             return redirect()->route('auth.register');
         }
@@ -71,11 +80,10 @@ class AuthController extends Controller
                 return redirect()->route('auth.register');
             }
             $req->session()->regenerate();
-            return redirect()->route('home');
+            return redirect()->route('auth.me');
         } catch (QueryException $e) {
             return redirect()->route('auth.register');
         } catch (Exception $e) {
         }
     }
-
 }
