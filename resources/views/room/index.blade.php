@@ -29,66 +29,61 @@
                 <table class="table table-hover align-middle mb-0">
                     <thead>
                         <tr>
-                            <th class="ps-4">Room info</th>
+                            <th class="ps-4">Room Info</th>
+                            <th>status</th>
                             <th>Category</th>
+                            <th>Tag</th>
                             <th>Daily Rate</th>
-                            <th>Status</th>
+                            <th>Tag</th>
                             <th class="text-end pe-4">Action</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach ( $rooms as $room)
                         <tr>
                             <td class="ps-4">
                                 <div class="d-flex align-items-center gap-3">
-                                    <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=100&q=80" class="room-img">
+                                    @if ($room->images)
+                                        <img src="{{ asset('storage/'.$room->images) }}" class="room-img">
+                                    @else
+                                        <img src="https://placehold.net/400x400.png" class="room-img">
+                                    @endif
                                     <div>
-                                        <div class="fw-bold">Executive Suite 101</div>
-                                        <div class="text-muted small">Floor 1 • Ocean View</div>
+                                        <div class="fw-bold">{{ $room->name }}</div>
+                                        <div class="text-muted small">{{ $room->property }}</div>
                                     </div>
                                 </div>
                             </td>
-                            <td><span class="badge bg-light text-dark fw-medium">Deluxe</span></td>
-                            <td><span class="fw-bold text-primary">$120.00</span></td>
                             <td>
+                                @if ($room->status == 'available')
                                 <span class="badge bg-success-subtle text-success border border-success-subtle px-2">
-                                    <span class="status-dot bg-success"></span>Available
-                                </span>
+                                    <span class="status-dot bg-success"></span>{{ $room->status }}</span>
+                                @elseif($room->status == 'occupied')
+                                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2">
+                                    <span class="status-dot bg-primary"></span>{{ $room->status }}</span>
+                                @elseif($room->status == 'maintenance')
+                                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2">
+                                    <span class="status-dot bg-danger"></span>{{ $room->status }}</span>
+                                @endif
                             </td>
+                                <td><span class="badge bg-light text-dark fw-medium">{{ $room->category }}</span></td>
+                                <td><span class="badge bg-light text-dark fw-medium">{{ $room->Tag }}</span></td>
+                                <td><span class="fw-bold text-primary">${{ $room->price }}</span></td>
+                                <td><span class="fw-bold text-primary">{{ $room->capacity }}</span></td>
                             <td class="text-end pe-4">
-                                <a class="btn btn-light btn-action text-warning border" title="Edit">
+                                <a href="{{ route('room.edit', $room->id) }}" class="btn btn-light btn-action text-warning border" title="Edit">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </a>
-                                <a class="btn btn-light btn-action text-danger border" title="Delete">
-                                    <i class="fa-solid fa-trash"></i>
-                                </a>
+                                <form action="{{ route('room.destroy', $room->id) }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-light btn-action text-danger border" title="Delete">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
-                        <tr>
-                            <td class="ps-4">
-                                <div class="d-flex align-items-center gap-3">
-                                    <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=100&q=80" class="room-img">
-                                    <div>
-                                        <div class="fw-bold">Standard Double 202</div>
-                                        <div class="text-muted small">Floor 2 • City View</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><span class="badge bg-light text-dark fw-medium">Double</span></td>
-                            <td><span class="fw-bold text-primary">$85.00</span></td>
-                            <td>
-                                <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2">
-                                    <span class="status-dot bg-danger"></span>Occupied
-                                </span>
-                            </td>
-                            <td class="text-end pe-4">
-                                <button class="btn btn-light btn-action text-warning border" title="Edit">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
-                                <button class="btn btn-light btn-action text-danger border" title="Delete">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

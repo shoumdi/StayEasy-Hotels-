@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
             $table->integer('capacity');
-            $table->integer('name');
+            $table->string('name');
             $table->float('price');
             $table->enum('status', ['available', 'occupied', 'maintenance']);
+            $table->string('images')->nullable();
             $table->foreignId('tag_id')->constrained();
             $table->foreignId('category_id')->constrained();
             $table->foreignId('proprety_id')->constrained();

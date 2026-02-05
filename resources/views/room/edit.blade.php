@@ -1,65 +1,86 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Edit Room</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layouts.gerant')
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
+@section('main')
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-
-            <div class="card shadow">
-                <div class="card-header bg-warning">
-                    <h4 class="mb-0">Edit Room</h4>
-                </div>
-
-                <div class="card-body">
-                    <form>
-
-                        <div class="mb-3">
-                            <label class="form-label">Room Name</label>
-                            <input type="text" class="form-control" value="Room 101">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Room Type</label>
-                            <select class="form-select">
-                                <option selected>Single</option>
-                                <option>Double</option>
-                                <option>Suite</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Price per Night</label>
-                            <input type="number" class="form-control" value="50">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Status</label>
-                            <select class="form-select">
-                                <option selected>Available</option>
-                                <option>Occupied</option>
-                            </select>
-                        </div>
-
-                        <div class="d-flex justify-content-between">
-                            <a href="admin-rooms.html" class="btn btn-secondary">Back</a>
-                            <button type="submit" class="btn btn-warning">Update Room</button>
-                        </div>
-
-                    </form>
-                </div>
-            </div>
-
-        </div>
+<div class="row align-items-end mb-4">
+    <div class="col">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-1">
+                <li class="breadcrumb-item"><a href="#" class="text-decoration-none text-muted small">Dashboard</a></li>
+                <li class="breadcrumb-item active small" aria-current="page">Rooms</li>
+            </ol>
+        </nav>
+        <h2 class="fw-bold mb-0 text-dark">Add Room</h2>
     </div>
 </div>
 
-</body>
-</html>
+<hr class="mb-4 text-muted opacity-25">
+
+<div class="card-body">
+    <form method="POST" action="{{ route('room.update' , $room->id)}}" enctype="multipart/form-data">
+        @csrf
+        @method('PUT')
+        <div class="mb-3">
+            <label class="form-label">Room Name</label>
+            <input type="text" value="{{ $room->name }}" class="form-control" name="name" placeholder="Room 101">
+        </div>
+        <div class="mb-3">  
+            <label class="form-label">Room Capacity</label>
+            <input name="capacity" value="{{ $room->capacity }}" type="number" class="form-control" placeholder="100">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Photo</label>
+            <input type="file" class="form-control" name="images">
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Room Type</label>
+            <select name="category_id" class="form-select">
+                <option value="{{ $room->category_id }}">{{ $room->category }}</option>
+                @foreach ($categories as $category)
+                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="tag" class="form-label">Tag</label>
+            <select name="tag_id" class="form-select">
+                <option  value="{{ $room->category_id }}">{{ $room->Tag }}</option>
+                @foreach ($tags as $tag)
+                <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="proprety" class="form-label">proprety</label>
+            <select name="proprety_id" class="form-select">
+                <option value="{{ $room->proprety_id }}" >{{ $room->property }}</option>
+                @foreach ($propreties as $proprety)
+                <option value="{{ $proprety->id }}">{{ $proprety->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Status</label>
+                <select class="form-select" name="status" id="status">
+                    <option value="{{ $room->status }}">-- {{ $room->status }} --</option>
+                    <option value="Available">Available</option>
+                    <option value="Occupied">Occupied</option>
+                    <option value="maintenance">Maintenance</option>
+                </select>
+        </div>
+        <div class="mb-3">  
+            <label class="form-label">Price per Night</label>
+            <input name="price" value="{{ $room->price }}" type="number" class="form-control" placeholder="Enter Price Per Night">
+        </div>
+        
+        
+        <div class="d-flex justify-content-between">
+            <a href="{{ route('room.index') }}" class="btn btn-secondary">Back</a>
+            <button type="submit" class="btn btn-primary">Save Room</button>
+        </div>
+        
+    </form>
+</div>
+@endsection
+
