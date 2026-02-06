@@ -7,7 +7,7 @@
             @csrf
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
-                <input type="text" name="username" class="form-control" id="username" aria-describedby="usernameHelp">
+                <input type="text" name="name" class="form-control" id="username" aria-describedby="usernameHelp">
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>

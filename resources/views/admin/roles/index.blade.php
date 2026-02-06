@@ -18,27 +18,27 @@
         </nav>
     </asid>
     <main class="col-span-9">
-        <table class="w-full">
+        <table class="table">
             <thead>
                 <tr>
-                    <th class="px-4 py-2 text-left border-b border-gray-300 text-white">Id</th>
-                    <th class="px-4 py-2 text-left border-b border-gray-300 text-white">Name</th>
-                    <th class="px-4 py-2 text-left border-b border-gray-300 text-white text-right">Actions</th>
+                    <th class="col">Id</th>
+                    <th class="col">Name</th>
+                    <th class="col">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($roles as $role)
                 <tr>
-                    <td class="px-4 py-2 border-b border-gray-200 text-white">{{$role->id}}</td>
-                    <td class="px-4 py-2 border-b border-gray-200 text-white">{{$role->name}}</td>
-                    <td class="px-4 py-2 border-b border-gray-200">
-                        <div class="flex justify-end gap-2">
+                    <td class="col">{{$role->id}}</td>
+                    <td class="col">{{$role->name}}</td>
+                    <td class="col">
+                        <div class="d-flex justify-content-end gap-2">
                             <form action="{{route('admin.roles.edit')}}" method="post">
                                 @csrf
                                 <input type="hidden" name="id" value="{{$role->id}}">
                                 <button type="submit" class="size-5 text-orange-600 hover:text-white"><i class="fas fa-edit"></i></button>
                             </form>
-                            <form action="" method="post">
+                            <form action="{{route('admin.roles.delete')}}" method="post">
                                 @csrf
                                 @method('delete')
                                 <input type="hidden" name="id" value="{{$role->id}}">

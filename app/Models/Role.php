@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Role extends Model
 {
+    protected $fillable = ['id','name'];
     use HasFactory;
     
     public function users():HasMany{

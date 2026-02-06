@@ -59,20 +59,17 @@ class AuthController extends Controller
         $credentials = $req->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
-            'username' => ['required'],
+            'name' => ['required'],
             'role_id' => ['required'],
             ]);
             // dd($req);
         if (User::where('email', $credentials['email'])->exists()) {
             return redirect()->route('auth.register');
         }
+        $credentials['status']= (Role::where('name','Manager')->value('id') === (int)$credentials['role_id'])? 'pending' : 'active';
+        // dd($credentials);
         try {
-            $user = User::create([
-                'email' => $credentials['email'],
-                'password' => $credentials['password'],
-                'name' => $credentials['username'],
-                'role_id' => (int)$credentials['role_id']
-            ]);
+            $user = User::create($credentials);
             if ($user === null || !Auth::attempt([
                 'email' => $credentials['email'],
                 'password' => $credentials['password']
@@ -82,6 +79,7 @@ class AuthController extends Controller
             $req->session()->regenerate();
             return redirect()->route('auth.me');
         } catch (QueryException $e) {
+            dd($e);
             return redirect()->route('auth.register');
         } catch (Exception $e) {
         }
