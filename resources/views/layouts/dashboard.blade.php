@@ -1,24 +1,3 @@
-<?php
-$links = [
-    [
-        'title' => 'Users',
-        'selected' => true,
-        "icon" => 'fa-solid fa-user-large me-3'
-
-    ],
-    [
-        'title' => 'Role',
-        'selected' => false,
-        "icon" => 'fa-solid fa-key me-3'
-
-    ],
-    [
-        'title' => 'Hotel',
-        'selected' => false,
-        "icon" => 'fa-solid fa-bed me-3'
-    ]
-]
-?>
 @extends('layouts.app')
 @section('content')
 <aside class="sidebar" id="sidebar">
@@ -32,32 +11,21 @@ $links = [
     <ul class="nav nav-pills flex-column">
         @foreach($links as $link)
         <li class="nav-item">
-            <a href="#" class="nav-link {{($link['selected'])? 'active' : ''}}"><i class="{{$link['icon']}}"></i>{{$link['title']}}</a>
+            <a href="{{$link['route']}}" class="nav-link {{($link['selected'])? 'active' : ''}}"><i class="{{$link['icon']}}"></i>{{$link['title']}}</a>
         </li>
         @endforeach
+        <li class="nav-item mt-auto">
+            <a id="profile" href="{{route('profile.index')}}" class="nav-link">
+                <img src="{{asset($user->image->url)}}" class="rounded-circle bg-light me-3" style="width: 32px; height:32px">
+                Profile</a>
+        </li>
     </ul>
 </aside>
 
 <div class="main-wrapper">
-    <header class="d-flex justify-content-between align-items-center mb-5">
-        <div class="search-container d-none d-md-block">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" class="form-control search-input w-100" placeholder="Search rooms...">
-        </div>
-
-        <div class="d-flex align-items-center gap-3">
-            <div class="text-end">
-                <h6 class="mb-0 fw-bold">Alex Johnson</h6>
-                <span class="text-muted small">Property Manager</span>
-            </div>
-            <div class="dropdown">
-                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80" class="rounded-circle border" width="45" height="45" style="cursor: pointer;" data-bs-toggle="dropdown">
-                <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-2 mt-2">
-                    <li><a class="dropdown-item rounded" href="#">Profile</a></li>
-                    <li><a class="dropdown-item rounded text-danger" href="#">Logout</a></li>
-                </ul>
-            </div>
-        </div>
+    <header class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Index</h2>
+        <i class="fa-regular fa-bell"></i>
     </header>
     <main>
         @yield('main');
@@ -88,6 +56,10 @@ $links = [
         border-right: 1px solid #e2e8f0;
         padding: 1.5rem;
         z-index: 100;
+    }
+
+    .nav {
+        flex-grow: 1;
     }
 
     .brand-logo {
@@ -178,7 +150,9 @@ $links = [
         display: inline-block;
         margin-right: 6px;
     }
-
+    .resize-none{
+        resize: none !important;
+    }
     /* Responsive */
     @media (max-width: 992px) {
         .sidebar {

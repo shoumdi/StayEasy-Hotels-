@@ -6,7 +6,7 @@
         <div class="card mb-3 p-2">
             <div class="row g-0 justify-content-start">
                 <div class="col-md-1">
-                    <img id="profilePicture" src="{{$user->profile_picture ?? '...'}}" class="card-img-top" alt="...">
+                    <img id="profilePicture" src="{{$user->image->url}}" class="card-img-top" alt="...">
                 </div>
                 <div class="col-md-3">
                     <div class="card-body">
@@ -20,11 +20,12 @@
                         <p class="card-text">{{$user->email}}</p>
                     </div>
                 </div>
-                <div class="col-md-5 d-flex justify-content-end align-items-start">
+                <div class="col-md-5 d-flex justify-content-end align-items-start gap-2">
                     @if($user->role->name === 'Client')
                         <a href="">Become a Manager</a>
                     @endif
                     <a href="{{route('profile.edit')}}" class="btn btn-primary">edit</a>
+                    <a href="{{route('auth.logout')}}" class="btn btn-outline-danger">logout</a>
                 </div>
             </div>
 

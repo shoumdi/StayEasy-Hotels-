@@ -8,7 +8,7 @@
             <div class="mb-3">
                 <label for="formFileMultiple" class="form-label">Profile picture</label>
                 <div id="formFileMultiple" class="d-flex justify-content-start align-items-center gap-3">
-                    <img id="profilePicture" src="{{$user->image->url ?? asset('assets/images/profile/default.jpg')}}" alt="{{$user->name}} picture" class="rounded-circle bg-white" style="height: 64px;width:64px">
+                    <img id="profilePicture" src="{{asset($user->image->url)}}" alt="{{$user->name}} picture" class="rounded-circle bg-white" style="height: 64px;width:64px">
                     <label class="btn btn-primary" for="file-upload">
                         Change picture
                         <input type="file" name="picture" id="file-upload" accept="image/*" class="d-none">

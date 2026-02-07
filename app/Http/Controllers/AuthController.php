@@ -15,7 +15,7 @@ class AuthController extends Controller
     public function me()
     {
         $user = auth()->user();
-        switch ($user->role->name) {
+        switch ($user->role->name ?? 'Guest') {
             case 'Admin':
                 return redirect()->route('admin.roles.index');
                 break;
@@ -26,7 +26,7 @@ class AuthController extends Controller
                 die('Manager');
                 break;
             default:
-                die('uknown');
+                die('Guest');
         }
     }
     public function showLoginView()
@@ -70,6 +70,7 @@ class AuthController extends Controller
         // dd($credentials);
         try {
             $user = User::create($credentials);
+            $user->image()->create();
             if ($user === null || !Auth::attempt([
                 'email' => $credentials['email'],
                 'password' => $credentials['password']
@@ -83,5 +84,12 @@ class AuthController extends Controller
             return redirect()->route('auth.register');
         } catch (Exception $e) {
         }
+    }
+
+    public function logout(Request $req){
+        auth()->logout();
+        $req->session()->invalidate();
+        $req->session()->regenerateToken();
+        return redirect('/');
     }
 }

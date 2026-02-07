@@ -11,8 +11,31 @@ class UserController extends Controller
 {
     public function index()
     {
+        $links = [
+            [
+                'title' => 'Users',
+                'selected' => true,
+                'route' => route('admin.users.index'),
+                "icon" => 'fa-solid fa-user-large me-3'
+
+            ],
+            [
+                'title' => 'Roles',
+                'selected' => false,
+                'route' => route('admin.roles.index'),
+                "icon" => 'fa-solid fa-key me-3'
+
+            ],
+            [
+                'title' => 'Hotels',
+                'selected' => false,
+                'route' => '',
+                "icon" => 'fa-solid fa-bed me-3'
+            ]
+        ];
+        $authenticatedUser=auth()->user()->load(['role','image']);
         $users = User::with('role')->get();
-        return view('admin.users.index', compact('users'));
+        return view('admin.users.index', compact('users', 'links','authenticatedUser'));
     }
 
     public function edit(Request $req)
@@ -21,9 +44,9 @@ class UserController extends Controller
             'id' => ['required'],
         ]);
         $user = User::with('role')->find((int)$data['id']);
-        $roles = Role::whereNot('name','Admin')->get();
+        $roles = Role::whereNot('name', 'Admin')->get();
         // dd($roles);
-        return view('admin.users.edit',compact(['user','roles']));
+        return view('admin.users.edit', compact(['user', 'roles']));
     }
     public function update(Request $req)
     {
