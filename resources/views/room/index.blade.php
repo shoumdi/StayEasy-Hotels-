@@ -76,7 +76,7 @@
                                         <img src="https://placehold.net/400x400.png" class="room-img">
                                     @endif
                                     <div>
-                                        <div class="fw-bold">{{ $room->name }}</div>
+                                        <a href="{{ route('room.show', $room->id) }}" style="dec" class=" text-decoration-none fw-bold">{{ $room->name }}</a>
                                         <div class="text-muted small">{{ $room->categories->name }}</div>
                                     </div>
                                 </div>

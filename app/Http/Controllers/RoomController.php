@@ -6,7 +6,7 @@ use App\Models\Categories;
 use App\Models\Propreties;
 use App\Models\Room;
 use App\Models\Tag;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Container\Attributes\Storage;
 use Illuminate\Http\Request;
 
 class RoomController extends Controller
@@ -18,7 +18,7 @@ class RoomController extends Controller
     {
         $tags = Tag::all();
         $propreties = Propreties::all();
-        $rooms = Room::with(['tag', 'propreties', 'categories'])->get();
+        $rooms = Room::with(['tag', 'propreties', 'categories'])->orderByDesc('id')->get();
         // dd($rooms[0]);   
         return view('room.index', compact('rooms', 'tags', 'propreties'));
     }
@@ -32,7 +32,6 @@ class RoomController extends Controller
         $propreties = Propreties::getProperties();
         $tags = Tag::getTags();
         $categories = Categories::getCategories();
-        // dd($propreties);
         return view('room.add', compact('propreties', 'categories', 'tags'));
     }
 
@@ -75,7 +74,12 @@ class RoomController extends Controller
      */
     public function show(string $id)
     {
-        
+        // dd($id);
+        $roomArr = Room::with(['tag', 'propreties', 'categories'])->where('id', $id)->limit(1)->get();
+        $room = $roomArr[0];
+        // dd($room->tag[0]->name);
+        return view('room.show', compact('room'));
+
     }
 
     /**
@@ -84,9 +88,7 @@ class RoomController extends Controller
     public function edit(string $id)
     {
 
-        dd($id);
         $room = Room::with(['tag', 'categories', 'propreties'])->where('rooms.id', $id)->first();
-        // dd($room->propreties[0]->name);
         $propreties = Propreties::getProperties();
         $tags = Tag::getTags();
         $categories = Categories::getCategories();

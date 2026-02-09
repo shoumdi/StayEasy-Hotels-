@@ -70,11 +70,11 @@ class PropretiesController extends Controller
         $propreties = Propreties::all();
         if ($id == 0) {
             $rooms = Room::all();
-            return view('room.index', compact('rooms', 'tags', 'propreties'));
+            return redirect()->route('room.index');
         }
         $rooms = Room::whereHas('propreties',function($query) use ($id){
             $query->where('propreties.id', $id);
-        })->get();  
+        })->orderByDesc('id')->get();  
         return view('room.index', compact('rooms', 'tags', 'propreties'));
     }
 }
