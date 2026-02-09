@@ -34,9 +34,9 @@
         </div>
         
         <div class="mb-3">
-            <label class="form-label">Room Type</label>
+            <label class="form-label">Room category</label>
             <select name="category_id" class="form-select">
-                <option value="{{ $room->category_id }}">{{ $room->category }}</option>
+                <option selected value="{{ $room->categories->id }}">{{ $room->categories->name }}</option>
                 @foreach ($categories as $category)
                 <option value="{{ $category->id }}">{{ $category->name }}</option>
                 @endforeach
@@ -44,21 +44,25 @@
         </div>
         <div class="mb-3">
             <label for="tag" class="form-label">Tag</label>
-            <select name="tag_id" class="form-select">
-                <option  value="{{ $room->category_id }}">{{ $room->Tag }}</option>
+            <div class="col-md-3 ">
                 @foreach ($tags as $tag)
-                <option value="{{ $tag->id }}">{{ $tag->name }}</option>
-                @endforeach
-            </select>
+                    <div class="form-check ">
+                        <input class="form-check-input"type="checkbox" name="tags[]" value="{{ $tag->id }}">
+                        <label class="form-check-label" for="tags">{{ $tag->name }}</label>
+                    </div>
+                    @endforeach
+            </div>
         </div>
         <div class="mb-3">
-            <label for="proprety" class="form-label">proprety</label>
-            <select name="proprety_id" class="form-select">
-                <option value="{{ $room->proprety_id }}" >{{ $room->property }}</option>
-                @foreach ($propreties as $proprety)
-                <option value="{{ $proprety->id }}">{{ $proprety->name }}</option>
+            <div class="col-md-3 ">
+            <label for="tag" class="form-label">properties</label>
+            @foreach ($propreties as $property)
+                <div class="form-check ">
+                    <input class="form-check-input" type="checkbox" name="propreties[]" value="{{ $property->id }}" id="category{{ $property->id }}">
+                    <label class="form-check-label" for="tags">{{ $property->name }}</label>
+                </div>
                 @endforeach
-            </select>
+            </div>
         </div>
         <div class="mb-3">
             <label class="form-label">Status</label>

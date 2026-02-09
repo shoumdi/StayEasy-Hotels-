@@ -10,5 +10,8 @@ class Categories extends Model
     public static function getCategories(){
         return Categories::all();
     }
+    public function rooms(){
+        return $this->hasMany(Room::class, 'category_id');
+    }
 
 }

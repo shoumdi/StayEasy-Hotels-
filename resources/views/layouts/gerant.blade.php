@@ -117,12 +117,37 @@
             display: inline-block;
             margin-right: 6px;
         }
-
-        /* Responsive */
         @media (max-width: 992px) {
             .sidebar { transform: translateX(-100%); transition: 0.3s; }
             .main-wrapper { margin-left: 0; }
             .sidebar.active { transform: translateX(0); }
+        }
+        .selection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .selection-grid input[type="checkbox"] {
+            display: none;
+        }
+        .selection-grid label {
+            display: block;
+            padding: 15px 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: white;
+            font-weight: 500;
+        }
+
+        .selection-grid input[type="checkbox"]:checked + label {
+            border-color: #4f46e5;
+            background-color: #f5f3ff;
+            color: #4f46e5;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>

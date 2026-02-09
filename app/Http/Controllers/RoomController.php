@@ -16,23 +16,14 @@ class RoomController extends Controller
      */
     public function index()
     {
-        $rooms = DB::table('rooms')
-        ->join('categories', 'rooms.category_id', '=', 'categories.id')
-        ->join('propreties', 'rooms.proprety_id', '=', 'propreties.id') 
-        ->join('tags', 'rooms.tag_id', '=', 'tags.id') 
-        ->select('rooms.id',
-                            'rooms.name',
-                            'rooms.price',
-                            'rooms.status',
-                            'rooms.capacity',
-                            'rooms.images',
-                            'categories.name as category',
-                            'tags.name as Tag',
-                            'propreties.name as property')
-        ->orderBy('rooms.created_at', 'desc')->paginate(15);
-        return view('room.index', compact('rooms'));
+        $tags = Tag::all();
+        $propreties = Propreties::all();
+        $rooms = Room::with(['tag', 'propreties', 'categories'])->get();
+        // dd($rooms[0]);   
+        return view('room.index', compact('rooms', 'tags', 'propreties'));
     }
 
+    
     /**
      * Show the form for creating a new resource.
      */
@@ -41,7 +32,7 @@ class RoomController extends Controller
         $propreties = Propreties::getProperties();
         $tags = Tag::getTags();
         $categories = Categories::getCategories();
-        // dd($categories);
+        // dd($propreties);
         return view('room.add', compact('propreties', 'categories', 'tags'));
     }
 
@@ -50,22 +41,33 @@ class RoomController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->input());
         $validated = $request->validate([
             'name'        => 'required|string',
             'status'      => 'nullable|string',
             'capacity'    => 'nullable|integer',
-            'category_id' => 'required',
-            'images'       => 'required|image|file',
-            'tag_id'      => 'required',
-            'proprety_id' => 'required',
+            'category_id' => 'required|exists:categories,id',
+            'images'      => 'file|max:20480',
+            'tags'        => 'nullable|array',
+            'tags.*'      => 'exists:tags,id',
+            'propreties'  => 'array',
+            'propreties.*'=> 'required|exists:propreties,id',
             'price'       => 'required|numeric'
         ]);
+        $room = Room::create([
+            'name'        => $validated['name'],
+            'status'      => $validated['status'] ?? null,
+            'capacity'    => $validated['capacity'] ?? null,
+            'category_id' => $validated['category_id'],
+            'price'       => $validated['price'],
+        ]);
         if ($request->hasFile('images')) {
-            $validated['images'] = $request->file('images')->store('images', 'public');
+            $path = $request->file('images')->store('rooms', 'public');
+            $room->update(['images' => $path]);
         }
-        Room::create($validated);
-        return redirect()->route('room.index')
-                        ->with('success', 'Room created successfully');
+        $room->tag()->sync($request->tags);
+        $room->propreties()->sync($request->propreties);
+        return redirect()->route('room.index');
     }
 
     /**
@@ -73,7 +75,7 @@ class RoomController extends Controller
      */
     public function show(string $id)
     {
-        //
+        
     }
 
     /**
@@ -81,17 +83,10 @@ class RoomController extends Controller
      */
     public function edit(string $id)
     {
-        $room = DB::table('rooms')
-        ->join('categories', 'rooms.category_id', '=', 'categories.id')
-        ->join('propreties', 'rooms.proprety_id', '=', 'propreties.id') 
-        ->join('tags', 'rooms.tag_id', '=', 'tags.id') 
-        ->select('rooms.*',
-                        'categories.name as category',
-                        'tags.name as Tag',
-                        'propreties.name as property'
-                        )
-        ->where('rooms.id', $id)->first();
-        // dd($room);
+
+        dd($id);
+        $room = Room::with(['tag', 'categories', 'propreties'])->where('rooms.id', $id)->first();
+        // dd($room->propreties[0]->name);
         $propreties = Propreties::getProperties();
         $tags = Tag::getTags();
         $categories = Categories::getCategories();
@@ -107,15 +102,23 @@ class RoomController extends Controller
             'name'        => 'required|string',
             'status'      => 'nullable|string',
             'capacity'    => 'nullable|integer',
-            'category_id' => 'required',
-            'images'       => 'required|image|file',
-            'tag_id'      => 'required',
-            'proprety_id' => 'required',
+            'category_id' => 'required|exists:categories,id',
+            'images'      => 'file|max:20480',
+            'tags'        => 'nullable|array',
+            'tags.*'      => 'exists:tags,id',
+            'propreties'  => 'array',
+            'propreties.*'=> 'required|exists:propreties,id',
             'price'       => 'required|numeric'
         ]);
         $validated['completed'] = $request->has('completed');
         $room = Room::find($id);
+        if ($request->hasFile('images')) {
+            $path = $request->file('images')->store('rooms', 'public');
+            $room->update(['images' => $path]);
+        }
         $room->update($validated);
+        $room->tag()->sync($request->tags);
+        $room->propreties()->sync($request->propreties);
         return redirect()->route('room.index');
     }
 

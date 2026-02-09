@@ -18,9 +18,9 @@ return new class extends Migration
             $table->float('price');
             $table->enum('status', ['available', 'occupied', 'maintenance']);
             $table->string('images')->nullable();
-            $table->foreignId('tag_id')->constrained();
+            // $table->foreignId('tag_id')->constrained();
             $table->foreignId('category_id')->constrained();
-            $table->foreignId('proprety_id')->constrained();
+            // $table->foreignId('proprety_id')->constrained();
             $table->timestamps();
         });
     }
