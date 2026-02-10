@@ -5,7 +5,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
+use Symfony\Component\HttpFoundation\Request;
 
 Route::get('/', [AuthController::class, 'me'])->name('auth.me');
 Route::middleware(['auth'])->get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
@@ -30,7 +30,7 @@ Route::middleware(['auth'])
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
         Route::post('/users', [UserController::class, 'edit'])->name('users.edit');
         Route::delete('/users', [UserController::class, 'delete'])->name('users.delete');
-        Route::put('/users', [UserController::class, 'update'])->name('users.update');
+        Route::patch('/users', [UserController::class, 'updateStatus'])->name('users.update.status');
     });
 
 Route::middleware(['auth'])
@@ -41,3 +41,19 @@ Route::middleware(['auth'])
         Route::get('/edit', [ProfileController::class, 'edit'])->name('edit');
         Route::put('/', [ProfileController::class, 'update'])->name('update');
     });
+
+Route::middleware(['auth'])
+    ->prefix('history')
+    ->name('history')
+    ->group(function () {
+        Route::get('/', [ProfileController::class, 'index'])->name('index');
+
+    });
+
+Route::get('/availability', function () {
+    return view('search-availability');
+})->name('availablility.search');
+
+Route::get('/availablility', function (Request $request) {
+    dd($request);
+});

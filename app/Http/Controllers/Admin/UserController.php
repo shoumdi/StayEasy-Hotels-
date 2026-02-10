@@ -33,9 +33,9 @@ class UserController extends Controller
                 "icon" => 'fa-solid fa-bed me-3'
             ]
         ];
-        $authenticatedUser=auth()->user()->load(['role','image']);
+        $authenticatedUser = auth()->user()->load(['role', 'image']);
         $users = User::with('role')->get();
-        return view('admin.users.index', compact('users', 'links','authenticatedUser'));
+        return view('admin.users.index', compact('users', 'links', 'authenticatedUser'));
     }
 
     public function edit(Request $req)
@@ -57,7 +57,16 @@ class UserController extends Controller
         User::find((int)$data['id'])->update(['status' => 'active']);
         return redirect()->route('admin.users.index');
     }
-
+    public function updateStatus(Request $req)
+    {
+        $data = $req->validate([
+            'id' => ['required'],
+            'status' => ['required']
+        ]);
+        // dd($data);
+        User::find((int)$data['id'])->update(['status' => $data['status']]);
+        return redirect()->route('admin.users.index');
+    }
     public function delete(Request $req)
     {
         $data = $req->validate([

@@ -14,6 +14,7 @@ class AuthController extends Controller
 
     public function me()
     {
+        
         $user = auth()->user();
         switch ($user->role->name ?? 'Guest') {
             case 'Admin':
@@ -26,7 +27,7 @@ class AuthController extends Controller
                 die('Manager');
                 break;
             default:
-                die('Guest');
+                return view('front-office.home');
         }
     }
     public function showLoginView()

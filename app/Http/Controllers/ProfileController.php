@@ -31,7 +31,6 @@ class ProfileController extends Controller
         ]);
         $pictureUrl = Storage::url($req->file('picture')->store('images/profile', 'public'));
         $user->update($data);
-        dd($pictureUrl);
         $user->image()->create(
             [
                 'url' => $pictureUrl

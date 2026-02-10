@@ -36,6 +36,10 @@
                         <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2">
                             <span class="status-dot bg-danger"></span>Denied</span>
                         @break
+                        @case('banned')
+                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2">
+                            <span class="status-dot bg-danger"></span>Banned</span>
+                        @break
                         @case('active')
                         <span class="badge bg-success-subtle text-success border border-success-subtle px-2">
 
@@ -46,14 +50,36 @@
 
                     <td class="text-end">
                         <div class="d-flex gap-2 align-items-center justify-content-end">
-                            <a href="" class="btn btn-light btn-action text-warning border" title="Edit">
+                            @if($user->status==='pending')
+                            <form action="{{route('admin.users.update.status')}}" method="post">
+                                @csrf
+                                @method('patch')
+                                <input type="hidden" name="status" value="denied">
+                                <input type="hidden" name="id" value="{{$user->id}}">
+                                <button class="btn btn-light btn-action text-danger border" type="submit">
+                                    <i class="fa-solid fa-ban"></i>
+                                </button>
+                            </form>
+                            <form action="{{route('admin.users.update.status')}}" method="post">
+                                @csrf
+                                @method('patch')
+                                <input type="hidden" name="status" value="active">
+                                <input type="hidden" name="id" value="{{$user->id}}">
+                                <button class="btn btn-light btn-action text-success border" type="submit">
+                                    <i class="fa-solid fa-check"></i>
+                                </button>
+                            </form>
+                            @endif
+                            <a href="" class="btn btn-light btn-action text-warning border">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </a>
 
-                            <form action="" method="POST">
+                            <form action="{{route('admin.users.update.status')}}" method="POST">
                                 @csrf
-                                @method('delete')
-                                <button type="submit" class="btn btn-light btn-action text-danger border" title="Delete">
+                                @method('patch')
+                                <input type="hidden" name="status" value="banned">
+                                <input type="hidden" name="id" value="{{$user->id}}">
+                                <button type="submit" class="btn btn-light btn-action text-danger border">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                             </form>
