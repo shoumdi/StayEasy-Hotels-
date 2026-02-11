@@ -69,7 +69,7 @@ $timeNow = explode(' ',now())[0];
                     <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
                     <li class="nav-item ms-lg-3">
-                        <a href="" class="btn btn-outline-light btn-sm">Login</a>
+                        <a href="{{route('auth.login.view')}}" class="btn btn-outline-light btn-sm">Login</a>
                     </li>
                     <li class="nav-item ms-2">
                         <a href="{{route('auth.register.view')}}" class="btn btn-primary btn-sm">Register</a>

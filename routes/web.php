@@ -60,7 +60,7 @@ Route::get('/reservations', function () {
     return view('search-availability');
 })->name('reservations.search');
 
-Route::get('/login', [AuthController::class,'index']);
+// Route::get('/login', [AuthController::class,'index']);
 // Route::get('/', function () {
 //     return view('welcome', ['name' => 'James']);
 // });
