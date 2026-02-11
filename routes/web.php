@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Client\AvailabilityController;
+use App\Http\Controllers\Client\ReservationController;
 use App\Http\Controllers\ProfileController;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -54,18 +56,18 @@ Route::middleware(['auth'])
 
     });
 
-Route::get('/availability', function () {
+Route::get('/reservations', function () {
     return view('search-availability');
-})->name('availablility.search');
+})->name('reservations.search');
 
-Route::get('/availablility', function (Request $request) {
-    dd($request);
-});
 Route::get('/login', [AuthController::class,'index']);
-Route::get('/', function () {
-    return view('welcome', ['name' => 'James']);
-});
+// Route::get('/', function () {
+//     return view('welcome', ['name' => 'James']);
+// });
 
 Route::get('/tags',[TagController::class, 'find'])->name('tag.find');
 Route::get('/propreties', [PropretiesController::class, 'find'])->name('propreties.find');
 Route::resource('room', RoomController::class);
+
+
+Route::get('/reservations',[AvailabilityController::class,'showAvailableRooms'])->name('reservations.disponible');
